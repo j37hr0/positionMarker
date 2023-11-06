@@ -15,18 +15,18 @@ class Connection:
         );""")
 
     def create_position_table(self):
-        self.conn_cursor.execute("""CREATE TABLE if not exists positions(
-            id INT PRIMARY KEY,
-            module_code TEXT,
-            position_name TEXT,
-            position_page INT,
-            position_datetime DATETIME
+        self.conn_cursor.execute("""CREATE TABLE if not exists positions (
+            "id"	INTEGER,
+            "module_code"	TEXT,
+            "position_name"	TEXT,
+            "position_page"	INTEGER,
+            "position_datetime"	TEXT DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY("id" AUTOINCREMENT)
         );""")
 
-    def create_position_entry(self, position_name, position_page, position_datetime):
+    def create_position_entry(self, module_code, position_name, position_page, position_datetime):
         with self.conn:
-            self.conn_cursor.execute("INSERT INTO positions VALUES (:position_name, :position_page, :position_datetime)", {'position_name': position_name, 'position_page': position_page, 'position_datetime': position_datetime})
-
+            self.conn_cursor.execute("INSERT INTO positions VALUES (:module_code, :position_name, :position_page, :position_datetime)", {'module_code': module_code, 'position_name': position_name, 'position_page': position_page, 'position_datetime': position_datetime})
     def create_module(self, module_name, module_code, module_year, module_archived):
         with self.conn:
             self.conn_cursor.execute("INSERT INTO modules VALUES (:module_name, :module_code, :module_year, :module_archived)", {'module_name': module_name, 'module_code': module_code, 'module_year': module_year, 'module_archived': module_archived})

@@ -12,8 +12,8 @@ import newEntry
 import moduleView
 
 sql_conn = sql.Connection()
-sql_conn.create_module_table()
 sql_conn.create_position_table()
+sql_conn.create_module_table()
 all_modules = sql_conn.get_all_modules()
 
 
@@ -57,7 +57,8 @@ def create_new_position(mainUI):
     Form.setWindowTitle("New Entry")
     Form.setFocus()
     newPositionEntry.module_options_new.addItems([str(module).strip("',)(") for module in all_modules])
-    #newEntry.new_entry_cancel.clicked.connect(lambda: MainWindow.third_window.close())
+    newPositionEntry.cancel_new_entry_btn.clicked.connect(lambda: MainWindow.third_window.close())
+    newPositionEntry.save_new_entry_btn.clicked.connect(lambda: sql_conn.create_position(newPositionEntry.module_options_new.currentText(), newPositionEntry.current_text_new.toPlainText(), newPositionEntry.current_number_new))
     MainWindow.third_window.show()
 
 
