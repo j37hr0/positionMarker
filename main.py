@@ -16,6 +16,7 @@ sql_conn.create_module_table()
 sql_conn.create_position_table()
 all_modules = sql_conn.get_all_modules()
 
+
 def create_newmodule_window(MainWindow):
     Form = QtWidgets.QWidget()
     newMod = newModule.Ui_Form()
@@ -55,6 +56,7 @@ def create_new_position(mainUI):
     MainWindow.third_window = Form
     Form.setWindowTitle("New Entry")
     Form.setFocus()
+    newPositionEntry.module_options_new.addItems([str(module).strip("',)(") for module in all_modules])
     #newEntry.new_entry_cancel.clicked.connect(lambda: MainWindow.third_window.close())
     MainWindow.third_window.show()
 

@@ -33,6 +33,12 @@ class Ui_Form(object):
         self.module_options_new = QtWidgets.QComboBox(Form)
         self.module_options_new.setGeometry(QtCore.QRect(30, 50, 81, 31))
         self.module_options_new.setObjectName("module_options_new")
+        self.save_new_entry_btn = QtWidgets.QPushButton(Form)
+        self.save_new_entry_btn.setGeometry(QtCore.QRect(70, 210, 75, 23))
+        self.save_new_entry_btn.setObjectName("save_new_entry_btn")
+        self.cancel_new_entry_btn = QtWidgets.QPushButton(Form)
+        self.cancel_new_entry_btn.setGeometry(QtCore.QRect(230, 210, 75, 23))
+        self.cancel_new_entry_btn.setObjectName("cancel_new_entry_btn")
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -43,6 +49,8 @@ class Ui_Form(object):
         self.label.setText(_translate("Form", "Current Text"))
         self.label_2.setText(_translate("Form", "Page Number"))
         self.label_3.setText(_translate("Form", "Module"))
+        self.save_new_entry_btn.setText(_translate("Form", "Save"))
+        self.cancel_new_entry_btn.setText(_translate("Form", "Cancel"))
 
 
 if __name__ == "__main__":
