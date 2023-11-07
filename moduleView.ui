@@ -13,17 +13,7 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QTableView" name="tableView">
-   <property name="geometry">
-    <rect>
-     <x>25</x>
-     <y>80</y>
-     <width>371</width>
-     <height>192</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="new_entry_specific_btn">
    <property name="geometry">
     <rect>
      <x>90</x>
@@ -47,6 +37,16 @@
    </property>
    <property name="text">
     <string>CurrentModule</string>
+   </property>
+  </widget>
+  <widget class="QListWidget" name="module_entry_list">
+   <property name="geometry">
+    <rect>
+     <x>50</x>
+     <y>100</y>
+     <width>321</width>
+     <height>192</height>
+    </rect>
    </property>
   </widget>
  </widget>

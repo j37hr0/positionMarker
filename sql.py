@@ -24,12 +24,21 @@ class Connection:
             PRIMARY KEY("id" AUTOINCREMENT)
         );""")
 
-    def create_position_entry(self, module_code, position_name, position_page, position_datetime):
+    def create_position_entry(self, module_code, position_name, position_page):
         with self.conn:
-            self.conn_cursor.execute("INSERT INTO positions VALUES (:module_code, :position_name, :position_page, :position_datetime)", {'module_code': module_code, 'position_name': position_name, 'position_page': position_page, 'position_datetime': position_datetime})
-    def create_module(self, module_name, module_code, module_year, module_archived):
+            try:
+                self.conn_cursor.execute("""
+            INSERT INTO positions (module_code, position_name, position_page)
+            VALUES (?, ?, ?)
+        """, (module_code, position_name, position_page))
+                self.conn.commit()
+            except Exception as e:
+                print(e)
+                #self.conn.rollback()
+
+    def create_module(self, module_code, module_name,  module_year, module_archived):
         with self.conn:
-            self.conn_cursor.execute("INSERT INTO modules VALUES (:module_name, :module_code, :module_year, :module_archived)", {'module_name': module_name, 'module_code': module_code, 'module_year': module_year, 'module_archived': module_archived})
+            self.conn_cursor.execute("INSERT INTO modules VALUES (:module_code, :module_name, :module_year, :module_archived)", {'module_code': module_code, 'module_name': module_name, 'module_year': module_year, 'module_archived': module_archived})
 
     def get_module_by_name(self, module_name):
         self.conn_cursor.execute("SELECT * FROM modules WHERE module_name=:module_name", {'module_name': module_name})
@@ -65,12 +74,12 @@ class Connection:
 
     def get_module_entries_by_code(self, module_code):
         self.conn_cursor.execute("SELECT * FROM positions WHERE module_code=:module_code", {'module_code': module_code})
+        print("sql has executed")
+        return self.conn_cursor.fetchall()
+
+    def get_top_positions(self):
+        self.conn_cursor.execute("SELECT module_code, position_name, position_page, position_datetime FROM positions ORDER BY position_datetime DESC LIMIT 5")
         return self.conn_cursor.fetchall()
 
 
 
-
-#Create database connection
-#conn = sqlite3.connect('modules.db')
-#Create cursor
-#conn_cursor = conn.cursor()

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'CurrentPositionUI.ui'
+# Form implementation generated from reading ui file '.\CurrentPositionUI.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -29,12 +29,12 @@ class Ui_MainWindow(object):
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(470, 50, 91, 31))
         self.label.setObjectName("label")
-        self.top_positions_table = QtWidgets.QTableView(self.centralwidget)
-        self.top_positions_table.setGeometry(QtCore.QRect(380, 110, 256, 192))
-        self.top_positions_table.setObjectName("top_positions_table")
         self.create_position_btn = QtWidgets.QPushButton(self.centralwidget)
         self.create_position_btn.setGeometry(QtCore.QRect(370, 60, 75, 23))
         self.create_position_btn.setObjectName("create_position_btn")
+        self.top_positions_table = QtWidgets.QListWidget(self.centralwidget)
+        self.top_positions_table.setGeometry(QtCore.QRect(300, 110, 331, 192))
+        self.top_positions_table.setObjectName("top_positions_table")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 701, 21))
