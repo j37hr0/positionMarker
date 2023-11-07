@@ -22,6 +22,15 @@ except Exception as e:
     print("Error connecting to database", e)
     sys.exit(1)
 
+def refresh_window():
+    all_modules = sql_conn.get_all_modules()
+    top_positions = sql_conn.get_top_positions()
+    ui.module_list.clear()
+    ui.module_list.addItems([str(module).strip("',)(") for module in all_modules])
+    ui.top_positions_table.clear()
+    ui.top_positions_table.addItems([str(position).strip("',)(") for position in top_positions])
+    MainWindow.show()
+
 def create_newmodule_window(MainWindow):
     Form = QtWidgets.QWidget()
     newMod = newModule.Ui_Form()
@@ -39,10 +48,16 @@ def create_newmodule_window(MainWindow):
     ui.module_list.clear()
     ui.module_list.addItems([str(module).strip("',)(") for module in all_modules])
     newMod.new_mod_confirm.clicked.connect(lambda: MainWindow.second_window.close())
+    newMod.new_mod_confirm.clicked.connect(lambda: refresh_window())
 
 
 def select_module(MainWindow):
     if ui.module_list.selectedItems() != 0:
+        def refresh():
+            selectedMod.module_entry_list.clear()
+            selectedMod.module_entry_list.addItems([str(entry).strip("',)(") for entry in current_mod_entries])
+            
+
         current_mod = sql_conn.get_module_by_name(ui.module_list.currentItem().text())
         current_mod_entries = sql_conn.get_module_entries_by_code(current_mod[0][1])
         Form = QtWidgets.QWidget()
@@ -54,8 +69,9 @@ def select_module(MainWindow):
         selectedMod.label.setText(current_mod[0][1])
         selectedMod.module_entry_list.addItems([str(entry).strip("',)(") for entry in current_mod_entries])
         selectedMod.new_entry_specific_btn.clicked.connect(lambda: create_new_position(mainUI.Ui_MainWindow, current_mod[0][1]))
-
+        selectedMod.new_entry_specific_btn.clicked.connect(lambda: refresh())
         MainWindow.fourth_window.show()
+
 
 def create_new_position(MainWindow, default_module=None):
     Form = QtWidgets.QWidget()
@@ -71,6 +87,8 @@ def create_new_position(MainWindow, default_module=None):
     newPositionEntry.save_new_entry_btn.clicked.connect(lambda: sql_conn.create_position_entry(newPositionEntry.module_options_new.currentText(), newPositionEntry.current_text_new.toPlainText(), int(newPositionEntry.current_number_new.toPlainText())))
     MainWindow.third_window.show()
     newPositionEntry.save_new_entry_btn.clicked.connect(lambda: MainWindow.third_window.close())
+    newPositionEntry.save_new_entry_btn.clicked.connect(lambda: refresh_window())
+
 
 app = QtWidgets.QApplication(sys.argv)
 MainWindow = QtWidgets.QMainWindow()
