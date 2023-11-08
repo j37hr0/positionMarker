@@ -55,6 +55,7 @@ def select_module(MainWindow):
 
         current_mod = sql_conn.get_module_by_name(ui.module_list.currentItem().text())
         current_mod_entries = sql_conn.get_module_entries_by_code(current_mod[0][1])
+        status = sql_conn.check_archive_status(current_mod[0][1])
         Form = QtWidgets.QWidget()
         selectedMod = moduleView.Ui_module_view()
         selectedMod.setupUi(Form)
@@ -63,6 +64,8 @@ def select_module(MainWindow):
         Form.setFocus()
         selectedMod.label.setText(current_mod[0][1])
         selectedMod.module_entry_list.addItems([str(entry).strip("',)(") for entry in current_mod_entries])
+        if status:
+            selectedMod.new_entry_specific_btn.hide()
         selectedMod.new_entry_specific_btn.clicked.connect(lambda: create_new_position(mainUI.Ui_MainWindow, current_mod[0][1]))
         selectedMod.new_entry_specific_btn.clicked.connect(lambda: refresh())
         MainWindow.fourth_window.show()

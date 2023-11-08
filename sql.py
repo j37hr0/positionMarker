@@ -87,5 +87,8 @@ class Connection:
         self.conn_cursor.execute("SELECT module_code, position_name, position_page, position_datetime FROM positions ORDER BY position_datetime DESC LIMIT 5")
         return self.conn_cursor.fetchall()
 
-
+    def check_archive_status(self, mod_code):
+        status = self.get_module_by_name(mod_code)[0][3]
+        print(status)
+        return status
 
