@@ -1,6 +1,5 @@
-##Refactor a bunch of the GUI refresh stuff
-##Implement edit of modules
-##Implement edit of entries
+##Implement edit of modules - this is tied with editing entries. We need some mechanism to do historical updates on records
+##Implement edit of entries - tied with editing of modules. Want some kind of trigger that updates historical records with edited information
 ##Disable new Entry button on module specific screen of archived modules
 
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -93,7 +92,8 @@ def toggle_archive():
     print(current_mod[0][1])
     sql_conn.update_module_archived(current_mod[0][1])
 
-#used to refresh and populate the module list (whether archived or not)
+
+#used to refresh and populate the module list (whether archived or not), and also the top_positions list
 def paint_lists():
     if ui.actionHide_Archived.isChecked():
         ui.module_list.clear()
@@ -125,8 +125,7 @@ ui.archive_module.clicked.connect(lambda: toggle_archive())
 ui.create_position_btn.clicked.connect(lambda: create_new_position(mainUI.Ui_MainWindow))
 ui.select_btn.clicked.connect(lambda: select_module(mainUI.Ui_MainWindow))
 paint_lists()
-ui.actionHide_Archived.triggered.connect(lambda: paint_module_list())
-ui.top_positions_table.addItems([str(position).strip("',)(") for position in top_positions])
+ui.actionHide_Archived.triggered.connect(lambda: paint_lists())
 sys.exit(app.exec_())
 
 
