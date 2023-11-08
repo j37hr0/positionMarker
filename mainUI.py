@@ -87,7 +87,7 @@ class Ui_MainWindow(object):
         self.menuView.setTitle(_translate("MainWindow", "View"))
         self.menuEdit.setTitle(_translate("MainWindow", "Edit"))
         self.menuHelp.setTitle(_translate("MainWindow", "Help"))
-        self.actionHide_Archived.setText(_translate("MainWindow", "Hide Archived"))
+        self.actionHide_Archived.setText(_translate("MainWindow", "Show Archived"))
         self.new_mod_btn.setText(_translate("MainWindow", "Module"))
         self.new_mod_btn.setStatusTip(_translate("MainWindow", "Add a new module"))
         self.actionExit.setText(_translate("MainWindow", "Exit"))

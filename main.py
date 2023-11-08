@@ -1,5 +1,7 @@
-##TODO Link newEntry and newModule
 ##Refactor a bunch of the GUI refresh stuff
+##Fix the window refresh function
+##Implement edit of modules
+##Implement edit of entries
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -12,6 +14,7 @@ import sql
 import newEntry
 import moduleView
 
+#connect to DB 
 try:
     sql_conn = sql.Connection()
     sql_conn.create_position_table()
@@ -22,6 +25,7 @@ except Exception as e:
     print("Error connecting to database", e)
     sys.exit(1)
 
+#refreshes the application
 def refresh_window():
     all_modules = sql_conn.get_all_modules()
     top_positions = sql_conn.get_top_positions()
@@ -31,6 +35,7 @@ def refresh_window():
     ui.top_positions_table.addItems([str(position).strip("',)(") for position in top_positions])
     MainWindow.show()
 
+#open and define the window for creating new modules
 def create_newmodule_window(MainWindow):
     Form = QtWidgets.QWidget()
     newMod = newModule.Ui_Form()
@@ -50,13 +55,12 @@ def create_newmodule_window(MainWindow):
     newMod.new_mod_confirm.clicked.connect(lambda: MainWindow.second_window.close())
     newMod.new_mod_confirm.clicked.connect(lambda: refresh_window())
 
-
+#open and define a module specific window with all of its entries
 def select_module(MainWindow):
     if ui.module_list.selectedItems() != 0:
         def refresh():
             selectedMod.module_entry_list.clear()
             selectedMod.module_entry_list.addItems([str(entry).strip("',)(") for entry in current_mod_entries])
-            
 
         current_mod = sql_conn.get_module_by_name(ui.module_list.currentItem().text())
         current_mod_entries = sql_conn.get_module_entries_by_code(current_mod[0][1])
@@ -72,7 +76,7 @@ def select_module(MainWindow):
         selectedMod.new_entry_specific_btn.clicked.connect(lambda: refresh())
         MainWindow.fourth_window.show()
 
-
+#Open and define the window for creating new entries
 def create_new_position(MainWindow, default_module=None):
     Form = QtWidgets.QWidget()
     newPositionEntry = newEntry.Ui_Form()
@@ -89,7 +93,15 @@ def create_new_position(MainWindow, default_module=None):
     newPositionEntry.save_new_entry_btn.clicked.connect(lambda: MainWindow.third_window.close())
     newPositionEntry.save_new_entry_btn.clicked.connect(lambda: refresh_window())
 
+#toggle archive status on module
+def toggle_archive():
+    current_mod = sql_conn.get_module_by_name(ui.module_list.currentItem().text())
+    print(current_mod[0][1])
+    sql_conn.update_module_archived(current_mod[0][1])
 
+
+
+##Main program stuff
 app = QtWidgets.QApplication(sys.argv)
 MainWindow = QtWidgets.QMainWindow()
 ui = mainUI.Ui_MainWindow()
@@ -97,9 +109,15 @@ ui.setupUi(MainWindow)
 MainWindow.show()
 MainWindow.setWindowTitle("Module Position Manager")
 ui.menuNew.triggered.connect(lambda: create_newmodule_window(mainUI.Ui_MainWindow))
+ui.archive_module.clicked.connect(lambda: toggle_archive())
 ui.create_position_btn.clicked.connect(lambda: create_new_position(mainUI.Ui_MainWindow))
 ui.select_btn.clicked.connect(lambda: select_module(mainUI.Ui_MainWindow))
-ui.module_list.addItems([str(module).strip("',)(") for module in all_modules])
+if ui.actionHide_Archived.isChecked():
+    all_modules = sql_conn.get_all_modules_archived()
+    ui.module_list.addItems([str(module).strip("',)(") for module in all_modules])
+else:
+    ui.module_list.addItems([str(module).strip("',)(") for module in all_modules])
+ui.actionHide_Archived.triggered.connect(lambda: print("it is connected"))
 ui.top_positions_table.addItems([str(position).strip("',)(") for position in top_positions])
 sys.exit(app.exec_())
 

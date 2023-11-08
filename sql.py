@@ -56,6 +56,10 @@ class Connection:
         self.conn_cursor.execute("SELECT module_name FROM modules where module_archived = 0")
         return self.conn_cursor.fetchall()
 
+    def get_all_modules_archived(self):
+        self.conn_cursor.execute("SELECT module_name FROM modules")
+        return self.conn_cursor.fetchall()
+
     def update_module_name(self, module_name, new_module_name):
         with self.conn:
             self.conn_cursor.execute("UPDATE modules SET module_name = :new_module_name WHERE module_name = :module_name", {'module_name': module_name, 'new_module_name': new_module_name})
@@ -68,9 +72,11 @@ class Connection:
         with self.conn:
             self.conn_cursor.execute("UPDATE modules SET module_year = :new_module_year WHERE module_year = :module_year", {'module_year': module_year, 'new_module_year': new_module_year})
 
-    def update_module_archived(self, module_archived, new_module_archived):
+    def update_module_archived(self, module_code):
         with self.conn:
-            self.conn_cursor.execute("UPDATE modules SET module_archived = :new_module_archived WHERE module_archived = :module_archived", {'module_archived': module_archived, 'new_module_archived': new_module_archived})
+            print("getting to sql")
+            self.conn_cursor.execute(f"update modules SET module_archived = (1 - module_archived) where module_name = '{module_code}'")
+            print("sending query too")
 
     def get_module_entries_by_code(self, module_code):
         self.conn_cursor.execute("SELECT * FROM positions WHERE module_code=:module_code", {'module_code': module_code})
