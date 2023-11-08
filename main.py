@@ -1,8 +1,7 @@
 ##Refactor a bunch of the GUI refresh stuff
-##Fix the window refresh function
 ##Implement edit of modules
 ##Implement edit of entries
-
+##Disable new Entry button on module specific screen of archived modules
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMessageBox, QInputDialog
@@ -14,7 +13,8 @@ import sql
 import newEntry
 import moduleView
 
-#connect to DB 
+
+#connect to DB
 try:
     sql_conn = sql.Connection()
     sql_conn.create_position_table()
@@ -25,15 +25,6 @@ except Exception as e:
     print("Error connecting to database", e)
     sys.exit(1)
 
-#refreshes the application
-def refresh_window():
-    all_modules = sql_conn.get_all_modules()
-    top_positions = sql_conn.get_top_positions()
-    ui.module_list.clear()
-    ui.module_list.addItems([str(module).strip("',)(") for module in all_modules])
-    ui.top_positions_table.clear()
-    ui.top_positions_table.addItems([str(position).strip("',)(") for position in top_positions])
-    MainWindow.show()
 
 #open and define the window for creating new modules
 def create_newmodule_window(MainWindow):
@@ -53,7 +44,8 @@ def create_newmodule_window(MainWindow):
     ui.module_list.clear()
     ui.module_list.addItems([str(module).strip("',)(") for module in all_modules])
     newMod.new_mod_confirm.clicked.connect(lambda: MainWindow.second_window.close())
-    newMod.new_mod_confirm.clicked.connect(lambda: refresh_window())
+    newMod.new_mod_confirm.clicked.connect(lambda: paint_lists())
+
 
 #open and define a module specific window with all of its entries
 def select_module(MainWindow):
@@ -76,6 +68,7 @@ def select_module(MainWindow):
         selectedMod.new_entry_specific_btn.clicked.connect(lambda: refresh())
         MainWindow.fourth_window.show()
 
+
 #Open and define the window for creating new entries
 def create_new_position(MainWindow, default_module=None):
     Form = QtWidgets.QWidget()
@@ -91,7 +84,8 @@ def create_new_position(MainWindow, default_module=None):
     newPositionEntry.save_new_entry_btn.clicked.connect(lambda: sql_conn.create_position_entry(newPositionEntry.module_options_new.currentText(), newPositionEntry.current_text_new.toPlainText(), int(newPositionEntry.current_number_new.toPlainText())))
     MainWindow.third_window.show()
     newPositionEntry.save_new_entry_btn.clicked.connect(lambda: MainWindow.third_window.close())
-    newPositionEntry.save_new_entry_btn.clicked.connect(lambda: refresh_window())
+    newPositionEntry.save_new_entry_btn.clicked.connect(lambda: paint_lists())
+
 
 #toggle archive status on module
 def toggle_archive():
@@ -99,6 +93,24 @@ def toggle_archive():
     print(current_mod[0][1])
     sql_conn.update_module_archived(current_mod[0][1])
 
+#used to refresh and populate the module list (whether archived or not)
+def paint_lists():
+    if ui.actionHide_Archived.isChecked():
+        ui.module_list.clear()
+        all_modules = sql_conn.get_all_modules_archived()
+        ui.module_list.addItems([str(module).strip("',)(") for module in all_modules])
+        ui.top_positions_table.clear()
+        ui.top_positions_table.addItems([str(position).strip("',)(") for position in top_positions])
+        ui.top_positions_table.repaint()
+        ui.module_list.repaint()
+    else:
+        ui.module_list.clear()
+        all_modules = sql_conn.get_all_modules()
+        ui.module_list.addItems([str(module).strip("',)(") for module in all_modules])
+        ui.top_positions_table.clear()
+        ui.top_positions_table.addItems([str(position).strip("',)(") for position in top_positions])
+        ui.top_positions_table.repaint()
+        ui.module_list.repaint()
 
 
 ##Main program stuff
@@ -112,12 +124,8 @@ ui.menuNew.triggered.connect(lambda: create_newmodule_window(mainUI.Ui_MainWindo
 ui.archive_module.clicked.connect(lambda: toggle_archive())
 ui.create_position_btn.clicked.connect(lambda: create_new_position(mainUI.Ui_MainWindow))
 ui.select_btn.clicked.connect(lambda: select_module(mainUI.Ui_MainWindow))
-if ui.actionHide_Archived.isChecked():
-    all_modules = sql_conn.get_all_modules_archived()
-    ui.module_list.addItems([str(module).strip("',)(") for module in all_modules])
-else:
-    ui.module_list.addItems([str(module).strip("',)(") for module in all_modules])
-ui.actionHide_Archived.triggered.connect(lambda: print("it is connected"))
+paint_lists()
+ui.actionHide_Archived.triggered.connect(lambda: paint_module_list())
 ui.top_positions_table.addItems([str(position).strip("',)(") for position in top_positions])
 sys.exit(app.exec_())
 
