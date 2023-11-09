@@ -9,3 +9,8 @@ This is also my first exposure to SQL Lite, although I've played on much more ro
 2. Install the requirements
 3. Run the app
 
+![img.png](img.png)
+
+![img_1.png](img_1.png)
+
+![img_2.png](img_2.png)
