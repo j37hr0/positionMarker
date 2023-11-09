@@ -1,6 +1,3 @@
-##Implement edit of modules - this is tied with editing entries. We need some mechanism to do historical updates on records
-##Implement edit of entries - tied with editing of modules. Want some kind of trigger that updates historical records with edited information
-##Disable new Entry button on module specific screen of archived modules
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMessageBox, QInputDialog
