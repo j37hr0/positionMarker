@@ -8,8 +8,8 @@ class Connection:
 
     def create_module_table(self):
         self.conn_cursor.execute("""CREATE TABLE if not exists modules(
-            module_code TEXT PRIMARY KEY,
             module_name TEXT UNIQUE,
+            module_code TEXT PRIMARY KEY,
             module_year INT,
             module_archived BOOLEAN
         );""")
