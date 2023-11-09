@@ -86,7 +86,7 @@ def create_new_position(MainWindow, default_module=None):
 
 #toggle archive status on module
 def toggle_archive():
-    current_mod = sql_conn.get_module_by_name(ui.module_list.currentItem().text())
+    current_mod = sql_conn.get_module_by_code(ui.module_list.currentItem().text())
     sql_conn.update_module_archived(current_mod[0][1])
 
 
