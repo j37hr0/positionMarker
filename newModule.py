@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'newModule.ui'
+# Form implementation generated from reading ui file '.\newModule.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -53,8 +53,8 @@ class Ui_Form(object):
         Form.setWindowTitle(_translate("Form", "Form"))
         self.new_mod_confirm.setText(_translate("Form", "Confirm"))
         self.new_mod_cancel.setText(_translate("Form", "Cancel"))
-        self.label.setText(_translate("Form", "Module Name"))
-        self.label_2.setText(_translate("Form", "Module Code"))
+        self.label.setText(_translate("Form", "Module Code"))
+        self.label_2.setText(_translate("Form", "Module Name"))
         self.label_3.setText(_translate("Form", "Module Year"))
 
 

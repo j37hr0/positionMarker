@@ -60,6 +60,10 @@ def select_module(MainWindow):
         Form.setWindowTitle("Module View")
         Form.setFocus()
         selectedMod.label.setText(current_mod[0][1])
+        #I need to add another label with current_mod[0][0] and resize both labels:
+        selectedMod.label_2.setText(current_mod[0][0])
+        selectedMod.label_2.adjustSize()
+        selectedMod.label.adjustSize()
         selectedMod.module_entry_list.addItems([str(entry).strip("',)(") for entry in current_mod_entries])
         if status:
             selectedMod.new_entry_specific_btn.hide()

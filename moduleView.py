@@ -24,6 +24,9 @@ class Ui_module_view(object):
         self.module_entry_list = QtWidgets.QListWidget(module_view)
         self.module_entry_list.setGeometry(QtCore.QRect(50, 100, 321, 192))
         self.module_entry_list.setObjectName("module_entry_list")
+        self.label_2 = QtWidgets.QLabel(module_view)
+        self.label_2.setGeometry(QtCore.QRect(180, 10, 47, 16))
+        self.label_2.setObjectName("label_2")
 
         self.retranslateUi(module_view)
         QtCore.QMetaObject.connectSlotsByName(module_view)
@@ -33,6 +36,7 @@ class Ui_module_view(object):
         module_view.setWindowTitle(_translate("module_view", "Form"))
         self.new_entry_specific_btn.setText(_translate("module_view", "New Entry"))
         self.label.setText(_translate("module_view", "CurrentModule"))
+        self.label_2.setText(_translate("module_view", "TextLabel"))
 
 
 if __name__ == "__main__":

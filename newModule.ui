@@ -45,7 +45,7 @@
   <widget class="QPlainTextEdit" name="mod_name_input">
    <property name="geometry">
     <rect>
-     <x>40</x>
+     <x>140</x>
      <y>60</y>
      <width>104</width>
      <height>41</height>
@@ -61,7 +61,7 @@
   <widget class="QPlainTextEdit" name="mod_code_input">
    <property name="geometry">
     <rect>
-     <x>150</x>
+     <x>20</x>
      <y>60</y>
      <width>104</width>
      <height>41</height>
@@ -94,7 +94,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Module Name</string>
+    <string>Module Code</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_2">
@@ -107,7 +107,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Module Code</string>
+    <string>Module Name</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_3">
