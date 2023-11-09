@@ -45,29 +45,24 @@ def create_newmodule_window(MainWindow):
 #open and define a module specific window with all of its entries
 def select_module(MainWindow):
     if ui.module_list.selectedItems() != 0:
-        def refresh():
-            selectedMod.module_entry_list.clear()
-            selectedMod.module_entry_list.addItems([str(entry).strip("',)(") for entry in current_mod_entries])
 
-        current_mod = sql_conn.get_module_by_name(ui.module_list.currentItem().text())
-        current_mod_entries = sql_conn.get_module_entries_by_code(current_mod[0][1])
-        status = sql_conn.check_archive_status(current_mod[0][1])
+        current_mod = sql_conn.get_module_by_code(ui.module_list.currentItem().text())
+        current_mod_entries = sql_conn.get_module_entries_by_code(current_mod[0][0])
+        status = sql_conn.check_archive_status(current_mod[0][0])
         Form = QtWidgets.QWidget()
         selectedMod = moduleView.Ui_module_view()
         selectedMod.setupUi(Form)
         MainWindow.fourth_window = Form
         Form.setWindowTitle("Module View")
         Form.setFocus()
-        selectedMod.label.setText(current_mod[0][1])
-        #I need to add another label with current_mod[0][0] and resize both labels:
-        selectedMod.label_2.setText(current_mod[0][0])
+        selectedMod.label.setText(current_mod[0][0])
+        selectedMod.label_2.setText(current_mod[0][1])
         selectedMod.label_2.adjustSize()
         selectedMod.label.adjustSize()
         selectedMod.module_entry_list.addItems([str(entry).strip("',)(") for entry in current_mod_entries])
         if status:
             selectedMod.new_entry_specific_btn.hide()
-        selectedMod.new_entry_specific_btn.clicked.connect(lambda: create_new_position(mainUI.Ui_MainWindow, current_mod[0][1]))
-        selectedMod.new_entry_specific_btn.clicked.connect(lambda: refresh())
+        selectedMod.new_entry_specific_btn.clicked.connect(lambda: create_new_position(mainUI.Ui_MainWindow, current_mod[0][0]))
         MainWindow.fourth_window.show()
 
 
@@ -92,7 +87,6 @@ def create_new_position(MainWindow, default_module=None):
 #toggle archive status on module
 def toggle_archive():
     current_mod = sql_conn.get_module_by_name(ui.module_list.currentItem().text())
-    print(current_mod[0][1])
     sql_conn.update_module_archived(current_mod[0][1])
 
 

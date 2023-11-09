@@ -8,8 +8,8 @@ class Connection:
 
     def create_module_table(self):
         self.conn_cursor.execute("""CREATE TABLE if not exists modules(
-            module_name TEXT UNIQUE,
             module_code TEXT PRIMARY KEY,
+            module_name TEXT UNIQUE,
             module_year INT,
             module_archived BOOLEAN
         );""")
@@ -53,11 +53,11 @@ class Connection:
         return self.conn_cursor.fetchall()
 
     def get_all_modules(self):
-        self.conn_cursor.execute("SELECT module_name FROM modules where module_archived = 0")
+        self.conn_cursor.execute("SELECT module_code FROM modules where module_archived = 0")
         return self.conn_cursor.fetchall()
 
     def get_all_modules_archived(self):
-        self.conn_cursor.execute("SELECT module_name FROM modules")
+        self.conn_cursor.execute("SELECT module_code FROM modules")
         return self.conn_cursor.fetchall()
 
     def update_module_name(self, module_name, new_module_name):
@@ -80,7 +80,6 @@ class Connection:
 
     def get_module_entries_by_code(self, module_code):
         self.conn_cursor.execute("SELECT * FROM positions WHERE module_code=:module_code", {'module_code': module_code})
-        print("sql has executed")
         return self.conn_cursor.fetchall()
 
     def get_top_positions(self):
@@ -88,7 +87,7 @@ class Connection:
         return self.conn_cursor.fetchall()
 
     def check_archive_status(self, mod_code):
-        status = self.get_module_by_name(mod_code)[0][3]
+        status = self.get_module_by_code(mod_code)[0][3]
         print(status)
         return status
 
